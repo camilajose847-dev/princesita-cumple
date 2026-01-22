@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -18,7 +18,7 @@ body{
   font-family:'Playfair Display', serif;
 }
 
-/* ===== BORDE SOLO PARA LA CARTA ===== */
+/* ===== BORDE ===== */
 .border-card{
   position:fixed;
   inset:0;
@@ -31,7 +31,6 @@ body{
   letter-spacing:3px;
   text-shadow:0 0 6px #ff69b4,0 0 12px #ff69b4;
 }
-
 .border-card .top,
 .border-card .bottom{
   position:absolute;
@@ -39,22 +38,18 @@ body{
   transform:translateX(-50%);
   white-space:nowrap;
 }
-
 .border-card .top{top:2px}
 .border-card .bottom{bottom:2px}
-
 .border-card .left,
 .border-card .right{
   position:absolute;
   top:50%;
   white-space:nowrap;
 }
-
 .border-card .left{
   left:0;
   transform:translateY(-50%) rotate(-90deg);
 }
-
 .border-card .right{
   right:0;
   transform:translateY(-50%) rotate(90deg);
@@ -74,17 +69,15 @@ body{
 /* ===== INTRO ===== */
 #intro{
   background:url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee") center/cover no-repeat;
+  z-index:5;
 }
-
 .intro-text{
   font-family:'Great Vibes', cursive;
   font-size:2.6rem;
   color:#fff;
   text-align:center;
   text-shadow:0 0 15px #ff9acb;
-  animation:introFade 6s forwards;
 }
-
 .underline{
   margin-top:12px;
   width:200px;
@@ -92,27 +85,17 @@ body{
   background:#ff9acb;
 }
 
-@keyframes introFade{
-  0%{opacity:0;transform:scale(1.1)}
-  20%{opacity:1}
-  80%{opacity:1}
-  100%{opacity:0;transform:scale(.9)}
-}
-
 /* ===== CARTA ===== */
 #card{
   opacity:0;
   background:linear-gradient(#0d0d0d,#000);
 }
-
 .open-text{
   font-family:'Great Vibes', cursive;
   font-size:1.6rem;
   color:#ffd6e6;
   margin-bottom:18px;
-  z-index:5;
 }
-
 .envelope{
   width:250px;
   height:165px;
@@ -124,7 +107,6 @@ body{
   z-index:1000;
   touch-action:manipulation;
 }
-
 .flap{
   position:absolute;
   top:0;
@@ -135,7 +117,6 @@ body{
   transition:transform 1s;
   transform-origin:top;
 }
-
 .seal{
   position:absolute;
   inset:0;
@@ -151,20 +132,23 @@ body{
   opacity:0;
   background:url("foto.jpg") center/cover no-repeat;
 }
-
 .overlay{
   position:absolute;
   inset:0;
   background:rgba(0,0,0,.45);
 }
-
 .box{
   position:relative;
   max-width:420px;
   width:88%;
   text-align:center;
 }
-
+.title{
+  font-family:'Great Vibes', cursive;
+  font-size:2.4rem;
+  margin-bottom:20px;
+  color:#fff;
+}
 .text{
   color:#fff;
   font-size:1rem;
@@ -173,10 +157,12 @@ body{
   transition:opacity 1.3s;
 }
 
-.title{
-  font-family:'Great Vibes', cursive;
-  font-size:2.4rem;
-  margin-bottom:20px;
+/* ===== SPOTIFY OCULTO ===== */
+#spotify{
+  width:1px;
+  height:1px;
+  opacity:0;
+  pointer-events:none;
 }
 
 /* ===== LLUVIA ===== */
@@ -186,7 +172,6 @@ body{
   animation:fall linear forwards;
   z-index:30;
 }
-
 @keyframes fall{
   to{transform:translateY(110vh)}
 }
@@ -195,8 +180,11 @@ body{
 
 <body>
 
-<!-- ===== MUSICA (AGREGADO) ===== -->
-<audio id="music" src="music.mp3" loop></audio>
+<!-- ===== SPOTIFY ===== -->
+<iframe id="spotify"
+src="https://open.spotify.com/embed/track/3eJXnq5H5Zy0o7Zk7Vxj7p"
+allow="autoplay; encrypted-media">
+</iframe>
 
 <!-- ===== BORDE ===== -->
 <div class="border-card" id="borderCard">
@@ -210,6 +198,7 @@ body{
 <section class="screen" id="intro">
   <div class="intro-text">Para mi princesita bonita</div>
   <div class="underline"></div>
+  <p style="color:#fff;opacity:.8;margin-top:20px">(toca la pantalla 💗)</p>
 </section>
 
 <!-- ===== CARTA ===== -->
@@ -238,9 +227,14 @@ const borderCard=document.getElementById("borderCard");
 const envelope=document.getElementById("envelope");
 const text=document.getElementById("text");
 const title=document.getElementById("title");
-const music=document.getElementById("music");
+const spotify=document.getElementById("spotify");
 
 let opened=false;
+
+/* ===== INICIAR MUSICA AL TOCAR INTRO ===== */
+intro.addEventListener("click",()=>{
+  spotify.src += "?autoplay=1";
+});
 
 /* ===== TRANSICIÓN ===== */
 setTimeout(()=>{
@@ -257,14 +251,9 @@ setTimeout(()=>{
 envelope.addEventListener("pointerdown",()=>{
   if(opened) return;
   opened=true;
-
-  music.play().catch(()=>{});
-
   document.querySelector(".flap").style.transform="rotateX(180deg)";
   document.querySelector(".seal").style.opacity=0;
-
   rain();
-
   setTimeout(()=>{
     borderCard.style.display="none";
     card.style.opacity=0;
@@ -287,25 +276,24 @@ const parts=[
 "Quiero que shepas que siempre voy a estar para ti, en los días felices donde todo brilla, pero también cuando el mundo pesa un poquito más.",
 "Aquí tienes a alguien que te escucha, que te cuida, que te apoya y que jamás te va a soltar la mano.",
 "Este corazhóncito es tuyo, late por ti y siempre va a querer verte sonreír y sentirte en paz.",
-"Te amo más de lo que las palabras pueden decir, más de lo que cualquier mensaje puede explicar.",
+"Te amo más de lo que las palabras pueden decir.",
 "Te amo en cada pensamiento, en cada deseo bonito y en cada sueño donde estás tú.",
-"Mi princesita preciosa, ti amoooo demasiado, mi bonita, y deseo con todo mi corazón que este cumpleaños esté lleno de amor, abrazos y sonrisas 💞🥺👑"
+"Mi princesita preciosa, ti amoooo demasiado, mi bonita 💞🥺👑"
 ];
 
 let i=0;
 function showMessage(){
   title.innerText="Feliz cumpleaños, mi princesita";
-  setTimeout(()=>{ title.innerText=""; next(); },3000);
+  setTimeout(()=>{ title.innerText=""; next(); },3500);
 }
-
 function next(){
   if(i>=parts.length) return;
   text.style.opacity=0;
   setTimeout(()=>{
     text.innerText=parts[i++];
     text.style.opacity=1;
-    setTimeout(next,5200);
-  },700);
+    setTimeout(next,6000);
+  },800);
 }
 
 /* ===== LLUVIA ===== */
