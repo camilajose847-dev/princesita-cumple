@@ -73,7 +73,7 @@ body{
 
 /* ===== INTRO ===== */
 #intro{
-  background:url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee") center/cover no-repeat;
+  background:url("foto.jpg") center/cover no-repeat;
 }
 
 .intro-text{
@@ -177,7 +177,7 @@ body{
 
 <!-- 🎵 MÚSICA -->
 <audio id="music" loop>
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7e1e0b9a8c.mp3" type="audio/mpeg">
+  <source src="soso.mp3" type="audio/mpeg">
 </audio>
 
 <!-- ===== BORDE ===== -->
@@ -226,7 +226,7 @@ let opened=false;
 
 /* INICIO */
 document.getElementById("start").addEventListener("click",()=>{
-  music.play();
+  music.play(); // aquí se reproduce soso.mp3
   intro.style.opacity=0;
   setTimeout(()=>{
     intro.style.display="none";
