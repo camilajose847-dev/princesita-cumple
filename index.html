@@ -18,46 +18,32 @@ body{
   font-family:'Playfair Display', serif;
 }
 
-/* ===== BORDE SOLO PARA LA CARTA ===== */
-.border-card{
+/* ===== TAP SCREEN (CLAVE) ===== */
+#tapScreen{
   position:fixed;
   inset:0;
-  pointer-events:none;
-  z-index:999;
-  display:none;
+  background:url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee") center/cover no-repeat;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  z-index:9999;
+  transition:opacity 1.5s ease;
+}
+
+.tap-text{
   font-family:'Great Vibes', cursive;
-  color:#ffb6d9;
-  font-size:14px;
-  letter-spacing:3px;
-  text-shadow:0 0 6px #ff69b4,0 0 12px #ff69b4;
+  font-size:2.8rem;
+  color:#fff;
+  text-shadow:0 0 20px #ff9acb;
+  text-align:center;
 }
 
-.border-card .top,
-.border-card .bottom{
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  white-space:nowrap;
-}
-
-.border-card .top{top:2px}
-.border-card .bottom{bottom:2px}
-
-.border-card .left,
-.border-card .right{
-  position:absolute;
-  top:50%;
-  white-space:nowrap;
-}
-
-.border-card .left{
-  left:0;
-  transform:translateY(-50%) rotate(-90deg);
-}
-
-.border-card .right{
-  right:0;
-  transform:translateY(-50%) rotate(90deg);
+.tap-sub{
+  margin-top:10px;
+  color:#ffd6e6;
+  font-size:1rem;
+  letter-spacing:2px;
 }
 
 /* ===== SCREENS ===== */
@@ -73,6 +59,7 @@ body{
 
 /* ===== INTRO ===== */
 #intro{
+  opacity:0;
   background:url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee") center/cover no-repeat;
 }
 
@@ -80,10 +67,7 @@ body{
   font-family:'Great Vibes', cursive;
   font-size:2.6rem;
   color:#fff;
-  text-align:center;
   text-shadow:0 0 15px #ff9acb;
-  animation:introFade 6s forwards;
-  cursor:pointer;
 }
 
 .underline{
@@ -91,13 +75,6 @@ body{
   width:200px;
   height:2px;
   background:#ff9acb;
-}
-
-@keyframes introFade{
-  0%{opacity:0;transform:scale(1.1)}
-  20%{opacity:1}
-  80%{opacity:1}
-  100%{opacity:1}
 }
 
 /* ===== CARTA ===== */
@@ -111,7 +88,6 @@ body{
   font-size:1.6rem;
   color:#ffd6e6;
   margin-bottom:18px;
-  z-index:5;
 }
 
 .envelope{
@@ -122,7 +98,6 @@ body{
   box-shadow:0 20px 40px rgba(0,0,0,.5);
   position:relative;
   cursor:pointer;
-  z-index:1000;
   touch-action:manipulation;
 }
 
@@ -144,7 +119,7 @@ body{
   justify-content:center;
   align-items:center;
   font-size:30px;
-  transition:all 1s;
+  transition:opacity 1s;
 }
 
 /* ===== MENSAJE ===== */
@@ -166,30 +141,19 @@ body{
   text-align:center;
 }
 
+.title{
+  font-family:'Great Vibes', cursive;
+  font-size:2.4rem;
+  margin-bottom:20px;
+  color:#fff;
+}
+
 .text{
   color:#fff;
   font-size:1rem;
   line-height:1.7;
   opacity:0;
-  transition:opacity 1.3s;
-}
-
-.title{
-  font-family:'Great Vibes', cursive;
-  font-size:2.4rem;
-  margin-bottom:20px;
-}
-
-/* ===== LLUVIA ===== */
-.fall{
-  position:fixed;
-  top:-20px;
-  animation:fall linear forwards;
-  z-index:30;
-}
-
-@keyframes fall{
-  to{transform:translateY(110vh)}
+  transition:opacity 1.2s;
 }
 </style>
 </head>
@@ -197,21 +161,19 @@ body{
 <body>
 
 <!-- ===== AUDIO ===== -->
-<audio id="music" preload="auto" loop>
+<audio id="music" preload="auto">
   <source src="soso.mp3" type="audio/mpeg">
 </audio>
 
-<!-- ===== BORDE ===== -->
-<div class="border-card" id="borderCard">
-  <div class="top">I love you, my little Princess · I love you, my little Princess · I love you, my little Princess</div>
-  <div class="bottom">I love you, my little Princess · I love you, my little Princess · I love you, my little Princess</div>
-  <div class="left">I love you, my little Princess · I love you, my little Princess · I love you, my little Princess</div>
-  <div class="right">I love you, my little Princess · I love you, my little Princess · I love you, my little Princess</div>
+<!-- ===== TAP SCREEN ===== -->
+<div id="tapScreen">
+  <div class="tap-text">Para mi princesita bonita</div>
+  <div class="tap-sub">toca la pantalla 💗</div>
 </div>
 
 <!-- ===== INTRO ===== -->
 <section class="screen" id="intro">
-  <div class="intro-text" id="startIntro">Para mi princesita bonita</div>
+  <div class="intro-text">Para mi princesita bonita</div>
   <div class="underline"></div>
 </section>
 
@@ -234,42 +196,42 @@ body{
 </section>
 
 <script>
+const tapScreen=document.getElementById("tapScreen");
+const music=document.getElementById("music");
 const intro=document.getElementById("intro");
 const card=document.getElementById("card");
-const message=document.getElementById("message");
-const borderCard=document.getElementById("borderCard");
 const envelope=document.getElementById("envelope");
-const text=document.getElementById("text");
+const message=document.getElementById("message");
 const title=document.getElementById("title");
-const music=document.getElementById("music");
-const startIntro=document.getElementById("startIntro");
+const text=document.getElementById("text");
 
 let opened=false;
 
-/* ===== INICIO + MUSICA (FUNCIONA EN CELULAR) ===== */
-startIntro.addEventListener("pointerdown",()=>{
-  music.play().catch(()=>{});
-  intro.style.opacity=0;
+/* ===== TAP → MUSICA + INICIO ===== */
+tapScreen.addEventListener("pointerdown",()=>{
+  music.play();
+  tapScreen.style.opacity=0;
   setTimeout(()=>{
-    intro.style.display="none";
-    card.style.opacity=1;
-    borderCard.style.display="block";
-    rain();
-  },1500);
+    tapScreen.style.display="none";
+    intro.style.opacity=1;
+    setTimeout(()=>{
+      intro.style.opacity=0;
+      setTimeout(()=>{
+        intro.style.display="none";
+        card.style.opacity=1;
+      },1500);
+    },3000);
+  },1200);
 });
 
 /* ===== ABRIR CARTA ===== */
 envelope.addEventListener("pointerdown",()=>{
   if(opened) return;
   opened=true;
-
   document.querySelector(".flap").style.transform="rotateX(180deg)";
   document.querySelector(".seal").style.opacity=0;
 
-  rain();
-
   setTimeout(()=>{
-    borderCard.style.display="none";
     card.style.opacity=0;
     setTimeout(()=>{
       card.style.display="none";
@@ -279,20 +241,13 @@ envelope.addEventListener("pointerdown",()=>{
   },900);
 });
 
-/* ===== MENSAJE COMPLETO ===== */
+/* ===== MENSAJE ===== */
 const parts=[
 "Feliz cumpleaños, mi princesita hemosha 🥺🎂💖",
 "Hoy no es un día cualquiera, hoy celebro la vida de la pershonita más especial que llegó a mi mundo para hacerlo más bonito, más cálido y más lleno de amor.",
 "Desde que llegaste, todo tiene más color, más sentido y más sonrisas.",
-"Mi pechochita linda, nunca olvides lo increíble que eres, lo valiosa que eres y lo profundamente amada que estás, no solo hoy, sino todos los días de tu vida.",
-"Gracias por existir, por tu sonrisa tan hermosa que ilumina mis días, por tu ternura que me abraza el corazón incluso a la distancia.",
-"Gracias por cada momento, palabra y detalle que me regalas, por tu dulzura y por ese corazón tan grande que tienes.",
-"Quiero que shepas que siempre voy a estar para ti, en los días felices donde todo brilla, pero también cuando el mundo pesa un poquito más.",
-"Aquí tienes a alguien que te escucha, que te cuida, que te apoya y que jamás te va a soltar la mano.",
-"Este corazhóncito es tuyo, late por ti y siempre va a querer verte sonreír y sentirte en paz.",
-"Te amo más de lo que las palabras pueden decir, más de lo que cualquier mensaje puede explicar.",
-"Te amo en cada pensamiento, en cada deseo bonito y en cada sueño donde estás tú.",
-"Mi princesita preciosa, ti amoooo demasiado, mi bonita, y deseo con todo mi corazón que este cumpleaños esté lleno de amor, abrazos y sonrisas 💞🥺👑"
+"Mi pechochita linda, nunca olvides lo increíble que eres y lo profundamente amada que estás.",
+"Te amo más de lo que las palabras pueden decir, mi princesita preciosa 💞🥺👑"
 ];
 
 let i=0;
@@ -308,22 +263,7 @@ function next(){
     text.innerText=parts[i++];
     text.style.opacity=1;
     setTimeout(next,5200);
-  },700);
-}
-
-/* ===== LLUVIA ===== */
-function rain(){
-  for(let i=0;i<25;i++){
-    setTimeout(()=>{
-      const d=document.createElement("div");
-      d.className="fall";
-      d.innerText=Math.random()>.5?"⭐":"💗";
-      d.style.left=Math.random()*100+"vw";
-      d.style.animationDuration=2+Math.random()*2+"s";
-      document.body.appendChild(d);
-      setTimeout(()=>d.remove(),5000);
-    },i*120);
-  }
+  },600);
 }
 </script>
 
