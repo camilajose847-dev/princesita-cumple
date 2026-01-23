@@ -18,7 +18,7 @@ body{
   font-family:'Playfair Display', serif;
 }
 
-/* ===== BORDE ===== */
+/* ===== BORDE SOLO PARA LA CARTA ===== */
 .border-card{
   position:fixed;
   inset:0;
@@ -73,7 +73,7 @@ body{
 
 /* ===== INTRO ===== */
 #intro{
-  background:url("foto.jpg") center/cover no-repeat;
+  background:url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee") center/cover no-repeat;
 }
 
 .intro-text{
@@ -82,7 +82,7 @@ body{
   color:#fff;
   text-align:center;
   text-shadow:0 0 15px #ff9acb;
-  cursor:pointer;
+  animation:introFade 6s forwards;
 }
 
 .underline{
@@ -90,6 +90,13 @@ body{
   width:200px;
   height:2px;
   background:#ff9acb;
+}
+
+@keyframes introFade{
+  0%{opacity:0;transform:scale(1.1)}
+  20%{opacity:1}
+  80%{opacity:1}
+  100%{opacity:0;transform:scale(.9)}
 }
 
 /* ===== CARTA ===== */
@@ -103,6 +110,7 @@ body{
   font-size:1.6rem;
   color:#ffd6e6;
   margin-bottom:18px;
+  z-index:5;
 }
 
 .envelope{
@@ -162,7 +170,7 @@ body{
   font-size:1rem;
   line-height:1.7;
   opacity:0;
-  transition:opacity 1.6s;
+  transition:opacity 1.3s;
 }
 
 .title{
@@ -170,16 +178,25 @@ body{
   font-size:2.4rem;
   margin-bottom:20px;
 }
+
+/* ===== LLUVIA ===== */
+.fall{
+  position:fixed;
+  top:-20px;
+  animation:fall linear forwards;
+  z-index:30;
+}
+
+@keyframes fall{
+  to{transform:translateY(110vh)}
+}
 </style>
 </head>
 
 <body>
 
-<!-- 🎵 MÚSICA -->
-<audio id="musica" autoplay loop>
-  <source src="soso.mp3" type="audio/mpeg">
-  Tu navegador no soporta audio.
-</audio>
+<!-- ===== MUSICA (AGREGADO) ===== -->
+<audio id="music" src="musica.mp3" loop></audio>
 
 <!-- ===== BORDE ===== -->
 <div class="border-card" id="borderCard">
@@ -191,7 +208,7 @@ body{
 
 <!-- ===== INTRO ===== -->
 <section class="screen" id="intro">
-  <div class="intro-text" id="start">Para mi princesita bonita</div>
+  <div class="intro-text">Para mi princesita bonita</div>
   <div class="underline"></div>
 </section>
 
@@ -219,30 +236,34 @@ const card=document.getElementById("card");
 const message=document.getElementById("message");
 const borderCard=document.getElementById("borderCard");
 const envelope=document.getElementById("envelope");
-const music=document.getElementById("music");
 const text=document.getElementById("text");
 const title=document.getElementById("title");
+const music=document.getElementById("music");
 
 let opened=false;
 
-/* INICIO */
-document.getElementById("start").addEventListener("click",()=>{
-  music.play(); // aquí se reproduce soso.mp3
+/* ===== TRANSICIÓN ===== */
+setTimeout(()=>{
   intro.style.opacity=0;
   setTimeout(()=>{
     intro.style.display="none";
     card.style.opacity=1;
     borderCard.style.display="block";
+    rain();
   },1500);
-});
+},6000);
 
-/* ABRIR CARTA */
+/* ===== ABRIR CARTA ===== */
 envelope.addEventListener("pointerdown",()=>{
   if(opened) return;
   opened=true;
 
+  music.play().catch(()=>{});
+
   document.querySelector(".flap").style.transform="rotateX(180deg)";
   document.querySelector(".seal").style.opacity=0;
+
+  rain();
 
   setTimeout(()=>{
     borderCard.style.display="none";
@@ -255,31 +276,26 @@ envelope.addEventListener("pointerdown",()=>{
   },900);
 });
 
-/* 💌 MENSAJE COMPLETO (TU TEXTO) */
+/* ===== MENSAJE COMPLETO ===== */
 const parts=[
-"Feliz cumpleaños, mi princesita hemosha 🥺🎂💖.",
+"Feliz cumpleaños, mi princesita hemosha 🥺🎂💖",
 "Hoy no es un día cualquiera, hoy celebro la vida de la pershonita más especial que llegó a mi mundo para hacerlo más bonito, más cálido y más lleno de amor.",
 "Desde que llegaste, todo tiene más color, más sentido y más sonrisas.",
 "Mi pechochita linda, nunca olvides lo increíble que eres, lo valiosa que eres y lo profundamente amada que estás, no solo hoy, sino todos los días de tu vida.",
 "Gracias por existir, por tu sonrisa tan hermosa que ilumina mis días, por tu ternura que me abraza el corazón incluso a la distancia.",
-"Y por cada momento, palabra y detalle que me regalas.",
-"Gracias por ser tú, por tu forma tan bonita de querer, por tu dulzura y por ese corazón tan grande que tienes.",
-"Me siento muy afortunado de poder estar contigo, de aprender a amarte y de compartir contigo tantos sentimientos tan puros.",
-"Quiero que shepas que siempre voy a estar para ti, en los días felices donde todo brilla, pero también en esos días donde el mundo pesa un poquito más.",
+"Gracias por cada momento, palabra y detalle que me regalas, por tu dulzura y por ese corazón tan grande que tienes.",
+"Quiero que shepas que siempre voy a estar para ti, en los días felices donde todo brilla, pero también cuando el mundo pesa un poquito más.",
 "Aquí tienes a alguien que te escucha, que te cuida, que te apoya y que jamás te va a soltar la mano.",
 "Este corazhóncito es tuyo, late por ti y siempre va a querer verte sonreír y sentirte en paz.",
 "Te amo más de lo que las palabras pueden decir, más de lo que cualquier mensaje puede explicar.",
 "Te amo en cada pensamiento, en cada deseo bonito y en cada sueño donde estás tú.",
-"Mi princesita preciosa, ti amoooo demasiado, mi bonita, y deseo con todo mi corazón que este cumpleaños esté lleno de amor, abrazos, sonrisas y momentos hermosos, porque tú te mereces eso y mucho más 💞🥺👑"
+"Mi princesita preciosa, ti amoooo demasiado, mi bonita, y deseo con todo mi corazón que este cumpleaños esté lleno de amor, abrazos y sonrisas 💞🥺👑"
 ];
 
 let i=0;
 function showMessage(){
   title.innerText="Feliz cumpleaños, mi princesita";
-  setTimeout(()=>{
-    title.innerText="";
-    next();
-  },3500);
+  setTimeout(()=>{ title.innerText=""; next(); },3000);
 }
 
 function next(){
@@ -288,8 +304,23 @@ function next(){
   setTimeout(()=>{
     text.innerText=parts[i++];
     text.style.opacity=1;
-    setTimeout(next,6500);
-  },900);
+    setTimeout(next,5200);
+  },700);
+}
+
+/* ===== LLUVIA ===== */
+function rain(){
+  for(let i=0;i<25;i++){
+    setTimeout(()=>{
+      const d=document.createElement("div");
+      d.className="fall";
+      d.innerText=Math.random()>.5?"⭐":"💗";
+      d.style.left=Math.random()*100+"vw";
+      d.style.animationDuration=2+Math.random()*2+"s";
+      document.body.appendChild(d);
+      setTimeout(()=>d.remove(),5000);
+    },i*120);
+  }
 }
 </script>
 
