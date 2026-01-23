@@ -18,56 +18,99 @@ body{
   font-family:'Playfair Display', serif;
 }
 
-/* OVERLAY AUDIO */
-#musicOverlay{
+/* ===== BORDE SOLO PARA LA CARTA ===== */
+.border-card{
   position:fixed;
   inset:0;
-  background:#000;
-  z-index:5000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  pointer-events:none;
+  z-index:999;
+  display:none;
   font-family:'Great Vibes', cursive;
-  font-size:2.2rem;
-  color:#fff;
-  cursor:pointer;
+  color:#ffb6d9;
+  font-size:14px;
+  letter-spacing:3px;
+  text-shadow:0 0 6px #ff69b4,0 0 12px #ff69b4;
+}
+
+.border-card .top,
+.border-card .bottom{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  white-space:nowrap;
+}
+
+.border-card .top{top:2px}
+.border-card .bottom{bottom:2px}
+
+.border-card .left,
+.border-card .right{
+  position:absolute;
+  top:50%;
+  white-space:nowrap;
+}
+
+.border-card .left{
+  left:0;
+  transform:translateY(-50%) rotate(-90deg);
+}
+
+.border-card .right{
+  right:0;
+  transform:translateY(-50%) rotate(90deg);
+}
+
+/* ===== SCREENS ===== */
+.screen{
+  position:absolute;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
   transition:opacity 1.5s ease;
 }
 
-/* INTRO */
+/* ===== INTRO ===== */
 #intro{
-  position:absolute;
-  inset:0;
   background:url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee") center/cover no-repeat;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
 }
 
 .intro-text{
   font-family:'Great Vibes', cursive;
   font-size:2.6rem;
   color:#fff;
+  text-align:center;
   text-shadow:0 0 15px #ff9acb;
+  animation:introFade 6s forwards;
 }
 
 .underline{
+  margin-top:12px;
   width:200px;
   height:2px;
   background:#ff9acb;
-  margin-top:10px;
 }
 
-/* CARTA */
+@keyframes introFade{
+  0%{opacity:0;transform:scale(1.1)}
+  20%{opacity:1}
+  80%{opacity:1}
+  100%{opacity:0;transform:scale(.9)}
+}
+
+/* ===== CARTA ===== */
 #card{
-  position:absolute;
-  inset:0;
-  display:none;
+  opacity:0;
   background:linear-gradient(#0d0d0d,#000);
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
+}
+
+.open-text{
+  font-family:'Great Vibes', cursive;
+  font-size:1.6rem;
+  color:#ffd6e6;
+  margin-bottom:18px;
+  z-index:5;
 }
 
 .envelope{
@@ -75,8 +118,11 @@ body{
   height:165px;
   background:#fff;
   border-radius:18px;
+  box-shadow:0 20px 40px rgba(0,0,0,.5);
   position:relative;
   cursor:pointer;
+  z-index:1000;
+  touch-action:manipulation;
 }
 
 .flap{
@@ -86,24 +132,23 @@ body{
   height:80px;
   background:#ffd6e6;
   clip-path:polygon(0 0,50% 70%,100% 0);
+  transition:transform 1s;
   transform-origin:top;
-  transition:transform .8s ease;
 }
 
 .seal{
   position:absolute;
   inset:0;
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   font-size:30px;
+  transition:all 1s;
 }
 
-/* MENSAJE */
+/* ===== MENSAJE ===== */
 #message{
-  position:absolute;
-  inset:0;
-  display:none;
+  opacity:0;
   background:url("foto.jpg") center/cover no-repeat;
 }
 
@@ -116,122 +161,179 @@ body{
 .box{
   position:relative;
   max-width:420px;
-  width:90%;
-  margin:auto;
+  width:88%;
   text-align:center;
-  padding-top:80px;
-}
-
-.title{
-  font-family:'Great Vibes', cursive;
-  font-size:2.4rem;
-  color:#fff;
-  margin-bottom:20px;
 }
 
 .text{
   color:#fff;
   font-size:1rem;
   line-height:1.7;
+  opacity:0;
+  transition:opacity 1.3s;
+}
+
+.title{
+  font-family:'Great Vibes', cursive;
+  font-size:2.4rem;
+  margin-bottom:20px;
+}
+
+/* ===== LLUVIA ===== */
+.fall{
+  position:fixed;
+  top:-20px;
+  animation:fall linear forwards;
+  z-index:30;
+}
+
+@keyframes fall{
+  to{transform:translateY(110vh)}
+}
+
+/* ===== CAPA DE TOQUE PARA AUDIO ===== */
+#startTouch{
+  position:absolute;
+  inset:0;
+  z-index:50;
+  background:transparent;
 }
 </style>
 </head>
 
 <body>
 
-<div id="musicOverlay">Toca la pantalla</div>
-
-<audio id="music" loop>
+<!-- ===== AUDIO ===== -->
+<audio id="music" preload="auto" loop>
   <source src="soso.mp3" type="audio/mpeg">
 </audio>
 
-<!-- INTRO -->
-<section id="intro">
+<!-- ===== BORDE ===== -->
+<div class="border-card" id="borderCard">
+  <div class="top">I love you, my little Princess · I love you, my little Princess · I love you, my little Princess</div>
+  <div class="bottom">I love you, my little Princess · I love you, my little Princess · I love you, my little Princess</div>
+  <div class="left">I love you, my little Princess · I love you, my little Princess · I love you, my little Princess</div>
+  <div class="right">I love you, my little Princess · I love you, my little Princess · I love you, my little Princess</div>
+</div>
+
+<!-- ===== INTRO ===== -->
+<section class="screen" id="intro">
   <div class="intro-text">Para mi princesita bonita</div>
   <div class="underline"></div>
+  <div id="startTouch"></div>
 </section>
 
-<!-- CARTA -->
-<section id="card">
+<!-- ===== CARTA ===== -->
+<section class="screen" id="card">
+  <div class="open-text">Abre la cartita, princesita</div>
   <div class="envelope" id="envelope">
-    <div class="flap" id="flap"></div>
+    <div class="flap"></div>
     <div class="seal">💗</div>
   </div>
 </section>
 
-<!-- MENSAJE -->
-<section id="message">
+<!-- ===== MENSAJE ===== -->
+<section class="screen" id="message">
   <div class="overlay"></div>
   <div class="box">
-    <div class="title" id="title">Feliz cumpleaños, mi princesita</div>
+    <div class="title" id="title"></div>
     <div class="text" id="text"></div>
   </div>
 </section>
 
 <script>
-const music=document.getElementById("music");
-const overlay=document.getElementById("musicOverlay");
 const intro=document.getElementById("intro");
 const card=document.getElementById("card");
 const message=document.getElementById("message");
+const borderCard=document.getElementById("borderCard");
 const envelope=document.getElementById("envelope");
-const flap=document.getElementById("flap");
 const text=document.getElementById("text");
+const title=document.getElementById("title");
+const music=document.getElementById("music");
+const startTouch=document.getElementById("startTouch");
 
-/* MENSAJE COMPLETO */
+let opened=false;
+
+/* ===== TOQUE INICIAL (MÚSICA INMEDIATA) ===== */
+startTouch.addEventListener("pointerdown",()=>{
+  music.play().catch(()=>{});
+  startTouch.style.pointerEvents="none";
+
+  intro.style.opacity=0;
+  setTimeout(()=>{
+    intro.style.display="none";
+    card.style.opacity=1;
+    borderCard.style.display="block";
+    rain();
+  },1500);
+});
+
+/* ===== ABRIR CARTA ===== */
+envelope.addEventListener("pointerdown",()=>{
+  if(opened) return;
+  opened=true;
+
+  document.querySelector(".flap").style.transform="rotateX(180deg)";
+  document.querySelector(".seal").style.opacity=0;
+
+  rain();
+
+  setTimeout(()=>{
+    borderCard.style.display="none";
+    card.style.opacity=0;
+    setTimeout(()=>{
+      card.style.display="none";
+      message.style.opacity=1;
+      showMessage();
+    },1200);
+  },900);
+});
+
+/* ===== MENSAJE COMPLETO ===== */
 const parts=[
-"Feliz cumpleaños, mi princesita hemosha 🥺🎂💖.",
+"Feliz cumpleaños, mi princesita hemosha 🥺🎂💖",
 "Hoy no es un día cualquiera, hoy celebro la vida de la pershonita más especial que llegó a mi mundo para hacerlo más bonito, más cálido y más lleno de amor.",
 "Desde que llegaste, todo tiene más color, más sentido y más sonrisas.",
 "Mi pechochita linda, nunca olvides lo increíble que eres, lo valiosa que eres y lo profundamente amada que estás, no solo hoy, sino todos los días de tu vida.",
-"Gracias por existir, por tu sonrisa tan hermosa que ilumina mis días, por tu ternura que me abraza el corazón incluso a la distancia, y por cada momento, palabra y detalle que me regalas.",
-"Gracias por ser tú, por tu forma tan bonita de querer, por tu dulzura y por ese corazón tan grande que tienes.",
-"Quiero que shepas que siempre voy a estar para ti, en los días felices donde todo brilla, pero también en esos días donde el mundo pesa un poquito más.",
+"Gracias por existir, por tu sonrisa tan hermosa que ilumina mis días, por tu ternura que me abraza el corazón incluso a la distancia.",
+"Gracias por cada momento, palabra y detalle que me regalas, por tu dulzura y por ese corazón tan grande que tienes.",
+"Quiero que shepas que siempre voy a estar para ti, en los días felices donde todo brilla, pero también cuando el mundo pesa un poquito más.",
 "Aquí tienes a alguien que te escucha, que te cuida, que te apoya y que jamás te va a soltar la mano.",
 "Este corazhóncito es tuyo, late por ti y siempre va a querer verte sonreír y sentirte en paz.",
 "Te amo más de lo que las palabras pueden decir, más de lo que cualquier mensaje puede explicar.",
 "Te amo en cada pensamiento, en cada deseo bonito y en cada sueño donde estás tú.",
-"Mi princesita preciosa, ti amoooo demasiado, mi bonita, y deseo con todo mi corazón que este cumpleaños esté lleno de amor, abrazos, sonrisas y momentos hermosos 💞🥺👑"
+"Mi princesita preciosa, ti amoooo demasiado, mi bonita, y deseo con todo mi corazón que este cumpleaños esté lleno de amor, abrazos y sonrisas 💞🥺👑"
 ];
 
-let index=0;
-let interval=null;
+let i=0;
+function showMessage(){
+  title.innerText="Feliz cumpleaños, mi princesita";
+  setTimeout(()=>{ title.innerText=""; next(); },3000);
+}
 
-/* AUDIO + FLUJO */
-overlay.addEventListener("pointerdown",()=>{
-  music.play().catch(()=>{});
-  overlay.style.opacity=0;
-  setTimeout(()=>overlay.remove(),1500);
-
+function next(){
+  if(i>=parts.length) return;
+  text.style.opacity=0;
   setTimeout(()=>{
-    intro.style.display="none";
-    card.style.display="flex";
-  },2000);
-},{once:true});
+    text.innerText=parts[i++];
+    text.style.opacity=1;
+    setTimeout(next,5200);
+  },700);
+}
 
-/* ABRIR CARTA */
-envelope.addEventListener("pointerdown",()=>{
-  flap.style.transform="rotateX(180deg)";
-
-  setTimeout(()=>{
-    card.style.display="none";
-    message.style.display="block";
-    startMessage();
-  },800);
-},{once:true});
-
-/* MENSAJE SIN TRABARSE */
-function startMessage(){
-  text.innerText=parts[0];
-  index=1;
-
-  interval=setInterval(()=>{
-    if(index>=parts.length){
-      clearInterval(interval);
-      return;
-    }
-    text.innerText=parts[index++];
-  },6000);
+/* ===== LLUVIA ===== */
+function rain(){
+  for(let i=0;i<25;i++){
+    setTimeout(()=>{
+      const d=document.createElement("div");
+      d.className="fall";
+      d.innerText=Math.random()>.5?"⭐":"💗";
+      d.style.left=Math.random()*100+"vw";
+      d.style.animationDuration=2+Math.random()*2+"s";
+      document.body.appendChild(d);
+      setTimeout(()=>d.remove(),5000);
+    },i*120);
+  }
 }
 </script>
 
