@@ -121,7 +121,7 @@ body{
   box-shadow:0 20px 40px rgba(0,0,0,.5);
   position:relative;
   cursor:pointer;
-  z-index:1000;
+  z-index:1000; /* 🔥 CLAVE PARA CELULAR */
   touch-action:manipulation;
 }
 
@@ -195,9 +195,6 @@ body{
 
 <body>
 
-<!-- ===== MUSICA (AGREGADO) ===== -->
-<audio id="music" src="musica.mp3" loop></audio>
-
 <!-- ===== BORDE ===== -->
 <div class="border-card" id="borderCard">
   <div class="top">I love you, my little Princess · I love you, my little Princess · I love you, my little Princess</div>
@@ -238,7 +235,6 @@ const borderCard=document.getElementById("borderCard");
 const envelope=document.getElementById("envelope");
 const text=document.getElementById("text");
 const title=document.getElementById("title");
-const music=document.getElementById("music");
 
 let opened=false;
 
@@ -253,12 +249,10 @@ setTimeout(()=>{
   },1500);
 },6000);
 
-/* ===== ABRIR CARTA ===== */
+/* ===== ABRIR CARTA (FUNCIONA EN CELULAR) ===== */
 envelope.addEventListener("pointerdown",()=>{
   if(opened) return;
   opened=true;
-
-  music.play().catch(()=>{});
 
   document.querySelector(".flap").style.transform="rotateX(180deg)";
   document.querySelector(".seal").style.opacity=0;
