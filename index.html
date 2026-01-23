@@ -83,6 +83,7 @@ body{
   text-align:center;
   text-shadow:0 0 15px #ff9acb;
   animation:introFade 6s forwards;
+  cursor:pointer;
 }
 
 .underline{
@@ -96,7 +97,7 @@ body{
   0%{opacity:0;transform:scale(1.1)}
   20%{opacity:1}
   80%{opacity:1}
-  100%{opacity:0;transform:scale(.9)}
+  100%{opacity:1}
 }
 
 /* ===== CARTA ===== */
@@ -190,14 +191,6 @@ body{
 @keyframes fall{
   to{transform:translateY(110vh)}
 }
-
-/* ===== CAPA DE TOQUE PARA AUDIO ===== */
-#startTouch{
-  position:absolute;
-  inset:0;
-  z-index:50;
-  background:transparent;
-}
 </style>
 </head>
 
@@ -218,9 +211,8 @@ body{
 
 <!-- ===== INTRO ===== -->
 <section class="screen" id="intro">
-  <div class="intro-text">Para mi princesita bonita</div>
+  <div class="intro-text" id="startIntro">Para mi princesita bonita</div>
   <div class="underline"></div>
-  <div id="startTouch"></div>
 </section>
 
 <!-- ===== CARTA ===== -->
@@ -250,15 +242,13 @@ const envelope=document.getElementById("envelope");
 const text=document.getElementById("text");
 const title=document.getElementById("title");
 const music=document.getElementById("music");
-const startTouch=document.getElementById("startTouch");
+const startIntro=document.getElementById("startIntro");
 
 let opened=false;
 
-/* ===== TOQUE INICIAL (MÚSICA INMEDIATA) ===== */
-startTouch.addEventListener("pointerdown",()=>{
+/* ===== INICIO + MUSICA (FUNCIONA EN CELULAR) ===== */
+startIntro.addEventListener("pointerdown",()=>{
   music.play().catch(()=>{});
-  startTouch.style.pointerEvents="none";
-
   intro.style.opacity=0;
   setTimeout(()=>{
     intro.style.display="none";
